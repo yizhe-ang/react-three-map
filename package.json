@@ -27,7 +27,8 @@
     "ts:check": "tsc",
     "dev": "yarn ladle serve",
     "build:stories": "yarn ladle build",
-    "test": "yarn vitest"
+    "test": "yarn vitest",
+    "prepare": "yarn build"
   },
   "dependencies": {},
   "devDependencies": {
