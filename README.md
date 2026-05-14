@@ -144,6 +144,20 @@ It shares most of the props from R3F `<Canvas>`, so you can check them directly 
 | altitude  | The altitude coordinate where to add the scene.  | `0`        |
 | frameloop | Render mode: `"always"`, `"demand"`.             | `"always"` |
 | overlay   | Render on a separated canvas.                    | `false`    |
+| background | Scene background, passed through to R3F v10.     |            |
+
+R3F v10 supports setting the scene background directly on `<Canvas>`, replacing the old `<color attach="background">` pattern:
+
+```tsx
+<Canvas latitude={51} longitude={0} background="#1a1a2e">
+  <mesh>
+    <boxGeometry />
+    <meshStandardMaterial />
+  </mesh>
+</Canvas>
+```
+
+Advanced background values such as environment presets, HDR files, or separate background/environment object forms follow the installed `@react-three/fiber` v10 behavior.
 
 **About `overlay`**
 
