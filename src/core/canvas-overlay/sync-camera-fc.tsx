@@ -28,8 +28,8 @@ export const SyncCameraFC = memo<SyncCameraFCProps>(({
   const camRef = useRef<PerspectiveCamera>(null);
 
   const camera = useThree(s => s.camera) as PerspectiveCamera;
-  const gl = useThree(s => s.gl);
-  const threeCanvas = useThree(s => s.gl.domElement);
+  const renderer = useThree(s => s.renderer);
+  const threeCanvas = useThree(s => s.renderer.domElement);
   const scene = useThree(s => s.scene);
   const advance = useThree(s => s.advance);
   const setSize = useThree(s => s.setSize);
@@ -48,14 +48,14 @@ export const SyncCameraFC = memo<SyncCameraFCProps>(({
   useFrame(() => {
     syncCamera(camera, origin, r3m.viewProjMx)
 
-    if (manualRender) gl.render(scene, camera);
+    if (manualRender) renderer.render(scene, camera);
 
     map.triggerRepaint = triggerRepaint;
     if (mapPaintRequests.current > 0) {
       mapPaintRequests.current = 0;
       map.triggerRepaint();
     }
-  }, -Infinity)
+  }, { phase: manualRender ? 'render' : 'preRender', priority: 1000 })
 
   const onRender = useFunction((viewProjMx: Matrix4Tuple | {defaultProjectionData: {mainMatrix: Record<string, number>}}) => {
     map.triggerRepaint = triggerRepaintOff;
@@ -64,7 +64,6 @@ export const SyncCameraFC = memo<SyncCameraFCProps>(({
       setSize(
         mapCanvas.clientWidth,
         mapCanvas.clientHeight,
-        true,
         mapCanvas.offsetTop,
         mapCanvas.offsetLeft,
       );
@@ -76,7 +75,7 @@ export const SyncCameraFC = memo<SyncCameraFCProps>(({
       ready.current = true;
       onReady();
     }
-    advance(Date.now() * .001, true);
+    advance(Date.now(), true);
   })
 
   useEffect(() => {

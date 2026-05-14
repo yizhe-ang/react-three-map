@@ -8,22 +8,22 @@
   },
   "dependencies": {
     "@ladle/react": "^4.0.2",
-    "@react-three/drei": "^9.77.10",
-    "@react-three/fiber": "^8.13.4",
+    "@react-three/drei": "11.0.0-alpha.5",
+    "@react-three/fiber": "10.0.0-alpha.2",
     "leva": "^0.9.35",
     "mapbox-gl": "^3.10.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
     "react-map-gl": "^8.0.1",
     "react-three-map": "^0.8.1",
-    "three": "~0.153.0",
+    "three": "^0.182.0",
     "three-stdlib": "^2.23.10"
   },
   "devDependencies": {
-    "@types/react": "^18.2.14",
-    "@types/react-dom": "^18.2.6",
-    "@types/three": "^0.152.1",
-    "typescript": "^5.1.6",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@types/three": "^0.181.0",
+    "typescript": "^5.9.3",
     "vite": "^4.3.9"
   }
 }

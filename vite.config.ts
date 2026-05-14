@@ -27,11 +27,16 @@ export default defineConfig({
       base: '',
       resolve: {
         alias: {
+          'three/examples/jsm/utils/BufferGeometryUtils': resolve(__dirname, './stories/src/compat/buffer-geometry-utils.ts'),
+          'three/examples/jsm/utils/BufferGeometryUtils.js': resolve(__dirname, './stories/src/compat/buffer-geometry-utils.ts'),
           'react-three-map/maplibre': resolve(__dirname, './src/maplibre.index.ts'),
           'react-three-map/mapbox': resolve(__dirname, './src/mapbox.index.ts'),
           'react-three-map': resolve(__dirname, './src/mapbox.index.ts'),
-        }
       }
+    },
+    optimizeDeps: {
+      exclude: ['react-three-map', 'web-ifc-three']
+    }
     }
     // lib mode
     : {

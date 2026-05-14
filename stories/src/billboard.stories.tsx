@@ -1,4 +1,4 @@
-import { Billboard, Cylinder, Text } from "@react-three/drei";
+import { Billboard, Cylinder, Text } from "@react-three/drei/legacy";
 import { StoryMap } from "./story-map";
 
 export function Default() {

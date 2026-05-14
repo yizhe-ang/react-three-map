@@ -39,15 +39,15 @@ interface RenderAtCoordsProps {
 
 function RenderAtCoords({ r3m, origin }: RenderAtCoordsProps) {
 
-  const { gl, scene, set } = useThree()
+  const { renderer, scene, set } = useThree()
 
   const cameraRef = useRef<PerspectiveCamera>(null)
 
   useFrame(() => {
     if (!cameraRef.current) return;
     syncCamera(cameraRef.current, origin, r3m.viewProjMx);
-    gl.render(scene, cameraRef.current);
-  })
+    renderer.render(scene, cameraRef.current);
+  }, { phase: 'render' })
 
   useLayoutEffect(() => {
     if (!cameraRef.current) return;

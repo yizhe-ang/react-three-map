@@ -1,5 +1,5 @@
 import { Box, Stats } from "@react-three/drei";
-import { useRef, useState } from "react";
+import { RefObject, useRef, useState } from "react";
 import { MathUtils } from "three";
 import { StoryMap } from "./story-map";
 
@@ -25,7 +25,7 @@ export function Default() {
         onPointerOut={() => hover(false)}
         material-color={hovered ? 'purple' : 'orange'}
       />
-      <Stats className="stats" parent={ref} />
+      <Stats className="stats" parent={ref as unknown as RefObject<HTMLElement>} />
     </StoryMap>
     <div style={{ position: 'absolute', bottom: 0, right: 0, left: 0, background: '#ffffffc2', padding: '15px 20px 40px' }}>
       Hover over the box, it will only render once to change colour, or when you move the camera. Look at the stats to confirm.

@@ -1,5 +1,13 @@
 # react-three-map
 
+## 2.0.0
+
+### Major Changes
+
+- Update `react-three-map` for React 19 and `@react-three/fiber@10.0.0-alpha.2`.
+- Replace R3F v8 root internals with public v10 root/store APIs.
+- Add support for R3F v10 WebGPU renderers in `overlay` mode. Map custom-layer mode remains WebGL-only because it renders into the Mapbox/MapLibre WebGL context.
+
 ## 1.0.0
 
 ### Major Changes

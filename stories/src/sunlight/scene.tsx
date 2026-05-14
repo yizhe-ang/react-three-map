@@ -1,5 +1,6 @@
 import { Box, Plane, useHelper } from "@react-three/drei";
-import { MeshProps, useFrame, useThree } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
+import type { ThreeElements } from '@react-three/fiber';
 import { useCallback, useRef, useState } from 'react';
 import { CameraHelper, MathUtils, Mesh, OrthographicCamera } from "three";
 
@@ -13,7 +14,7 @@ export function MyScene({ showCamHelper }: { showCamHelper?: boolean }) {
 }
 
 
-function MyBox(props: MeshProps) {
+function MyBox(props: ThreeElements['mesh']) {
   const [hovered, hover] = useState(false);
   const mesh = useRef<Mesh>(null)
   const invalidate = useThree(st => st.invalidate);

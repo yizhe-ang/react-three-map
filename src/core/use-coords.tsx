@@ -1,6 +1,6 @@
-import { RootState, _roots, useThree } from "@react-three/fiber";
+import { useStore, useThree } from "@react-three/fiber";
+import type { RootStore } from "@react-three/fiber";
 import { useMemo } from "react";
-import { UseBoundStore } from 'zustand';
 import { Coords } from "../api/coords";
 
 export function useCoords() {
@@ -10,22 +10,22 @@ export function useCoords() {
 
 export function useSetCoords({longitude, latitude, altitude}: Coords) {
   
-  const canvas = useThree(s => s.gl.domElement);
+  const store = useStore();
   useMemo(()=>{
-    const store = _roots.get(canvas)!.store; // eslint-disable-line @typescript-eslint/no-non-null-assertion
     const coords : Coords = { longitude, latitude, altitude };
     setCoords(store, coords);
   }, [longitude, latitude, altitude]) // eslint-disable-line react-hooks/exhaustive-deps
 }
 
-export function useSetRootCoords(store:UseBoundStore<RootState>, {
+export function useSetRootCoords(store:RootStore | undefined, {
   longitude, latitude, altitude
 }: Coords) {
   useMemo(()=>{
+    if (!store) return;
     setCoords(store, {longitude, latitude, altitude});
-  }, [longitude, latitude, altitude]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [store, longitude, latitude, altitude]) // eslint-disable-line react-hooks/exhaustive-deps
 }
 
-export function setCoords(store:UseBoundStore<RootState>, coords: Coords) {
+export function setCoords(store:RootStore, coords: Coords) {
   store.setState({coords} as any) // eslint-disable-line @typescript-eslint/no-explicit-any
 }

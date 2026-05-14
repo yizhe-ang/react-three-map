@@ -1,7 +1,8 @@
 import { useEffect, useMemo } from 'react'
+import type { ReactElement } from 'react'
 import { ScreenBlendEffect } from './screen-blend-effect'
 
-export const ScreenBlend = () => {
+export const ScreenBlend = (): ReactElement => {
 
   const effect = useMemo(() => new ScreenBlendEffect(), [])
 

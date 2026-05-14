@@ -12,7 +12,7 @@ import { Render } from "../core/canvas-overlay/render";
 import { MapInstance } from "../core/generic-map";
 import { useFunction } from "../core/use-function";
 
-extend(THREE);
+extend(THREE as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
 const fromLngLat = MercatorCoordinate.fromLngLat
 
@@ -20,6 +20,9 @@ const fromLngLat = MercatorCoordinate.fromLngLat
 export const Canvas = memo<CanvasProps>(({ overlay, ...props }) => {
 
   const map = useMap().current!.getMap(); // eslint-disable-line @typescript-eslint/no-non-null-assertion
+  if (!overlay && props.renderer !== undefined) {
+    throw new Error('react-three-map: WebGPU renderer support requires overlay={true}. The map custom-layer mode renders into the Mapbox WebGL context.');
+  }
 
   return <>
     {overlay && <CanvasOverlay map={map} {...props} />}

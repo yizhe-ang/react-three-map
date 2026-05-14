@@ -51,14 +51,13 @@ export function Default() {
     canvas={{ shadows: 'variance' }}
   >
     <AdaptiveDpr />
-    {bloom && <EffectComposer disableNormalPass>
+    {bloom && <EffectComposer enableNormalPass={false}>
       <Bloom mipmapBlur
         luminanceSmoothing={luminanceSmoothing}
         luminanceThreshold={luminanceThreshold}
         levels={levels}
         intensity={intensity}
       />
-      {/* ScreenBlend forces transparency to work on the canvas overlay */}
       <ScreenBlend />
     </EffectComposer>}
     <ambientLight intensity={Math.PI} />

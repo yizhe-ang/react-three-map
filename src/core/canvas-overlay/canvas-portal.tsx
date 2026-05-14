@@ -1,4 +1,4 @@
-import { Canvas } from "@react-three/fiber";
+import { Canvas, RootState } from "@react-three/fiber";
 import { memo, useState } from "react";
 import { Matrix4Tuple } from "three";
 import { CanvasProps } from "../../api/canvas-props";
@@ -16,7 +16,7 @@ interface CanvasPortalProps extends CanvasProps {
 
 export const CanvasPortal = memo<CanvasPortalProps>(({
   children, latitude, longitude, altitude,
-  setOnRender, map, fromLngLat, ...props
+  setOnRender, map, fromLngLat, onCreated, ...props
 }) => {
 
   const mapCanvas = map.getCanvas();
@@ -28,11 +28,16 @@ export const CanvasPortal = memo<CanvasPortalProps>(({
     setReady(true);
   })
 
+  const handleCreated = useFunction((state: RootState) => {
+    if ('autoClear' in state.renderer) state.renderer.autoClear = false;
+    onCreated?.(state);
+  })
+
   return <Canvas
     events={events}
     eventSource={eventSource}
     {...props}
-    gl={{ autoClear: false, ...props.gl }}
+    onCreated={handleCreated}
   >
     <InitR3M
       map={map}

@@ -151,19 +151,33 @@ You may want to use `overlay` if:
 
 - You use `react-postprocessing` and have issues clearing the screen.
 - Want to avoid unnecesary map renders when only the Three scene changed.
+- Want to use R3F v10's `renderer` prop, including `WebGPURenderer`.
 
 But it comes with some caveats:
 
 - ThreeJS will always render on top, as this is now a separated canvas and doesn't have access to the map depth buffer.
 - `react-postprocessing` will also not work if you also use `<Coordinates>` components.
+- WebGPU is only supported with `overlay={true}`. The default map-layer mode renders into the Mapbox/MapLibre WebGL context.
+
+```tsx
+<Canvas latitude={51} longitude={0} overlay renderer>
+  <mesh>
+    <boxGeometry />
+    <meshStandardMaterial />
+  </mesh>
+</Canvas>
+```
+
+For WebGPU and TSL-specific JSX/hooks, import the matching R3F catalog from your app, such as `@react-three/fiber/webgpu`.
 
 #### Render Props removed from `@react-three/fiber`
 
 Because the scene now lives in a map, we leave a lot of the render and camera control to the map, rather than to R3F.
 
-Therefore, the following `<Canvas>` props are ignored:
+Therefore, the following `<Canvas>` props are ignored or constrained:
 
-- gl
+- gl (map-layer mode always uses the map's WebGL context)
+- renderer (throws unless `overlay` is enabled)
 - camera
 - resize
 - orthographic

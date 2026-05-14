@@ -41,7 +41,7 @@ export class BatchedPropertiesTexture extends DataTexture {
     const fieldId = fieldToIndex[name]
     const field = fields[fieldId]
     const dim = field.dim
-    const data = image.data
+    const data = image.data as Float32Array
     const offset = id * width * 4 + fieldId * 4
     for (let i = 0; i < dim; i++) data[offset + i] = values[i] || 0
     this.needsUpdate = true

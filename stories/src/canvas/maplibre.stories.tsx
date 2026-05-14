@@ -40,6 +40,32 @@ export function Maplibre() {
   </>
 }
 
+export function MaplibreOverlayWebGPU() {
+  return <div style={{ height: '100vh' }}>
+    <Map
+      initialViewState={{
+        latitude: 51,
+        longitude: 0,
+        zoom: 13,
+        pitch: 60,
+      }}
+      mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
+    >
+      <Canvas latitude={51} longitude={0} overlay renderer={{ antialias: true }}>
+        <hemisphereLight
+          args={["#ffffff", "#60666C"]}
+          position={[1, 4.5, 3]}
+          intensity={Math.PI}
+        />
+        <object3D scale={500}>
+          <Box position={[-1.2, 1, 0]} />
+          <Box position={[1.2, 1, 0]} />
+        </object3D>
+      </Canvas>
+    </Map>
+  </div>
+}
+
 const Box: FC<{ position: Vector3 }> = (props) => {
   // This reference gives us direct access to the THREE.Mesh object
   const ref = useRef<Mesh>(null)
