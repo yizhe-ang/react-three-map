@@ -29,7 +29,6 @@ export const CanvasPortal = memo<CanvasPortalProps>(({
   })
 
   const handleCreated = useFunction((state: RootState) => {
-    if ('autoClear' in state.renderer) state.renderer.autoClear = false;
     onCreated?.(state);
   })
 
