@@ -1,4 +1,4 @@
-import { Object3DNode, extend, useFrame } from "@react-three/fiber";
+import { ThreeElement, ThreeEvent, extend, useFrame } from "@react-three/fiber";
 import { memo, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Coords, coordsToVector3 } from "react-three-map";
 import { suspend } from "suspend-react";
@@ -10,8 +10,8 @@ extend({ BatchedStandardMaterial })
 
 declare module '@react-three/fiber' {
   interface ThreeElements {
-    batchedMesh: Object3DNode<BatchedMesh, typeof BatchedMesh>,
-    batchedStandardMaterial: Object3DNode<BatchedStandardMaterial, typeof BatchedStandardMaterial>,
+    batchedMesh: ThreeElement<typeof BatchedMesh>,
+    batchedStandardMaterial: ThreeElement<typeof BatchedStandardMaterial>,
   }
 }
 
@@ -109,7 +109,7 @@ export const BatchedBuildings = memo<BatchedBuildingsProps>(({ buildingsCenter, 
     ref={meshRef}
     args={[data.length, vertexCount, indexCount]}
     rotation={[-90 * MathUtils.DEG2RAD, 0, -90 * MathUtils.DEG2RAD]}
-    onPointerMove={e => (e.stopPropagation(), hover(e.batchId))}
+    onPointerMove={(e: ThreeEvent<PointerEvent> & { batchId?: number }) => (e.stopPropagation(), hover(e.batchId))}
     onPointerOut={() => hover(undefined)}
   >
     <batchedStandardMaterial ref={matRef} args={[data.length]} />

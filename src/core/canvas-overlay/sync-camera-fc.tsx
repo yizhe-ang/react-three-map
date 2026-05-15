@@ -1,6 +1,6 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { memo, useEffect, useLayoutEffect, useMemo, useRef } from "react";
-import { Matrix4Tuple, PerspectiveCamera } from "three";
+import { Camera, Matrix4Tuple, PerspectiveCamera, Scene } from "three";
 import { Coords } from "../../api/coords";
 import { MapInstance } from "../generic-map";
 import { syncCamera } from "../sync-camera";
@@ -28,8 +28,8 @@ export const SyncCameraFC = memo<SyncCameraFCProps>(({
   const camRef = useRef<PerspectiveCamera>(null);
 
   const camera = useThree(s => s.camera) as PerspectiveCamera;
-  const gl = useThree(s => s.gl);
-  const threeCanvas = useThree(s => s.gl.domElement);
+  const renderer = useThree(s => s.gl);
+  const threeCanvas = useThree(s => (s.gl as { domElement: HTMLCanvasElement }).domElement);
   const scene = useThree(s => s.scene);
   const advance = useThree(s => s.advance);
   const setSize = useThree(s => s.setSize);
@@ -48,7 +48,11 @@ export const SyncCameraFC = memo<SyncCameraFCProps>(({
   useFrame(() => {
     syncCamera(camera, origin, r3m.viewProjMx)
 
-    if (manualRender) gl.render(scene, camera);
+    if (manualRender) {
+      const render = renderer as { renderAsync?: (scene: Scene, camera: Camera) => Promise<void>, render?: (scene: Scene, camera: Camera) => void };
+      if (render.renderAsync) void render.renderAsync(scene, camera);
+      else render.render?.(scene, camera);
+    }
 
     map.triggerRepaint = triggerRepaint;
     if (mapPaintRequests.current > 0) {
@@ -64,7 +68,6 @@ export const SyncCameraFC = memo<SyncCameraFCProps>(({
       setSize(
         mapCanvas.clientWidth,
         mapCanvas.clientHeight,
-        true,
         mapCanvas.offsetTop,
         mapCanvas.offsetLeft,
       );

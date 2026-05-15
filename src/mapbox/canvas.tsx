@@ -12,7 +12,7 @@ import { Render } from "../core/canvas-overlay/render";
 import { MapInstance } from "../core/generic-map";
 import { useFunction } from "../core/use-function";
 
-extend(THREE);
+extend(THREE as never);
 
 const fromLngLat = MercatorCoordinate.fromLngLat
 

@@ -4,6 +4,7 @@ import { Matrix4Tuple } from "three";
 import { CanvasProps } from "../../api/canvas-props";
 import { events } from "../events";
 import { FromLngLat, MapInstance } from "../generic-map";
+import { getOverlayGLProps } from "../renderer-props";
 import { useFunction } from "../use-function";
 import { InitR3M } from "./init-r3m";
 import { SyncCameraFC } from "./sync-camera-fc";
@@ -32,7 +33,7 @@ export const CanvasPortal = memo<CanvasPortalProps>(({
     events={events}
     eventSource={eventSource}
     {...props}
-    gl={{ autoClear: false, ...props.gl }}
+    gl={getOverlayGLProps(props.gl)}
   >
     <InitR3M
       map={map}

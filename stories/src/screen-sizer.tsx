@@ -1,11 +1,11 @@
-import { calculateScaleFactor } from '@react-three/drei';
-import { Object3DProps, useFrame } from '@react-three/fiber';
+import { calculateScaleFactor } from '@react-three/drei/core';
+import { ThreeElements, useFrame } from '@react-three/fiber';
 import { memo, useRef } from 'react';
 import { Object3D, Vector3 } from 'three';
 
 const worldPos = new Vector3();
 
-export const ScreenSizer = memo<Omit<Object3DProps, 'scale'> & {scale?: number}>(({
+export const ScreenSizer = memo<Omit<ThreeElements['object3D'], 'scale'> & {scale?: number}>(({
   scale = 1, ...props
 }) => {
   const container = useRef<Object3D>(null);

@@ -1,7 +1,6 @@
-import { RootState, _roots, useThree } from "@react-three/fiber";
+import { RootStore, useStore, useThree } from "@react-three/fiber";
 import { useState } from "react";
 import { Matrix4, Matrix4Tuple } from "three";
-import { UseBoundStore } from 'zustand';
 import { FromLngLat, MapInstance } from "./generic-map";
 
 export interface R3M<T extends MapInstance = MapInstance> {
@@ -21,10 +20,9 @@ export function useR3M<T extends MapInstance> () {
 export function useInitR3M<T extends MapInstance>(props: {
   map: T; fromLngLat: FromLngLat;
 }) {
-  const canvas = useThree(s => s.gl.domElement);
+  const store = useStore();
   // to run only once
   useState(()=>{
-    const store = _roots.get(canvas)!.store; // eslint-disable-line @typescript-eslint/no-non-null-assertion
     initR3M({...props, store})
   })
 }
@@ -32,7 +30,7 @@ export function useInitR3M<T extends MapInstance>(props: {
 export function initR3M<T extends MapInstance>({store, ...props}: {
   map: T;
   fromLngLat: FromLngLat;
-  store: UseBoundStore<RootState>;
+  store: RootStore;
 }) {
   const viewProjMx = new Matrix4().identity().toArray();
   const r3m : R3M<T> = { ...props, viewProjMx };

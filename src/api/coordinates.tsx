@@ -1,6 +1,6 @@
 import { createPortal, useFrame, useThree } from "@react-three/fiber";
 import { PropsWithChildren, memo, useLayoutEffect, useRef, useState } from "react";
-import { Matrix4Tuple, PerspectiveCamera, Scene } from "three";
+import { Camera, Matrix4Tuple, PerspectiveCamera, Scene } from "three";
 import { syncCamera } from "../core/sync-camera";
 import { useCoordsToMatrix } from "../core/use-coords-to-matrix";
 import { R3M, useR3M } from "../core/use-r3m";
@@ -46,7 +46,9 @@ function RenderAtCoords({ r3m, origin }: RenderAtCoordsProps) {
   useFrame(() => {
     if (!cameraRef.current) return;
     syncCamera(cameraRef.current, origin, r3m.viewProjMx);
-    gl.render(scene, cameraRef.current);
+    const render = gl as unknown as { renderAsync?: (scene: Scene, camera: Camera) => Promise<void>, render?: (scene: Scene, camera: Camera) => void };
+    if (render.renderAsync) void render.renderAsync(scene, cameraRef.current);
+    else render.render?.(scene, cameraRef.current);
   })
 
   useLayoutEffect(() => {

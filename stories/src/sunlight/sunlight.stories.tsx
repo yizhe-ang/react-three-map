@@ -118,7 +118,7 @@ function Sun({ latitude, longitude }: { longitude: number, latitude: number }) {
   </>
 }
 
-function CamHelper({ camera }: { camera: RefObject<OrthographicCamera> }) {
+function CamHelper({ camera }: { camera: RefObject<OrthographicCamera | null> }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   useHelper(camera as any, CameraHelper);
 

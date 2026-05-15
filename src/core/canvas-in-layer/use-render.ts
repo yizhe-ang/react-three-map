@@ -1,6 +1,5 @@
-import { RootState } from "@react-three/fiber";
+import { RootStore } from "@react-three/fiber";
 import { Matrix4Tuple, PerspectiveCamera } from "three";
-import { UseBoundStore } from "zustand";
 import { MapInstance } from "../generic-map";
 import { syncCamera } from "../sync-camera";
 import { useFunction } from "../use-function";
@@ -11,11 +10,12 @@ export function useRender({
 } :{
   map: MapInstance,
   origin: Matrix4Tuple,
-  useThree: UseBoundStore<RootState>,
+  useThree?: RootStore,
   frameloop?: 'always' | 'demand',
-  r3m: R3M
+  r3m?: R3M
 }) {
   const render = useFunction((_gl: WebGL2RenderingContext, projViewMx: number[] | {defaultProjectionData: {mainMatrix: Record<string, number>}}) => {
+    if (!useThree || !r3m) return;
     const pVMx = 'defaultProjectionData' in projViewMx ? Object.values(projViewMx.defaultProjectionData.mainMatrix) : projViewMx;
     r3m.viewProjMx.splice(0, 16, ...pVMx)
     const state = useThree.getState();
