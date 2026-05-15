@@ -1,19 +1,6 @@
 import { CanvasProps } from "../api/canvas-props";
 
 type CanvasGL = CanvasProps["gl"];
-type GLFactory = Extract<NonNullable<CanvasGL>, (...args: any[]) => unknown>; // eslint-disable-line @typescript-eslint/no-explicit-any
-type GLDefaults = Parameters<GLFactory>[0];
-type RendererResult = ReturnType<GLFactory>;
-
-function setAutoClearFalse(renderer: unknown) {
-  if (renderer && typeof renderer === "object" && "autoClear" in renderer) {
-    (renderer as { autoClear: boolean }).autoClear = false;
-  }
-}
-
-function isPromiseLike<T>(value: T | Promise<T>): value is Promise<T> {
-  return Boolean(value) && typeof (value as Promise<T>).then === "function";
-}
 
 function isRendererLike(value: unknown) {
   return value !== null
@@ -23,26 +10,7 @@ function isRendererLike(value: unknown) {
 }
 
 export function getOverlayGLProps(gl: CanvasGL): CanvasGL {
-  if (typeof gl === "function") {
-    return ((defaults: GLDefaults) => {
-      const renderer = gl(defaults);
-      if (isPromiseLike(renderer)) {
-        return renderer.then((resolved) => {
-          setAutoClearFalse(resolved);
-          return resolved;
-        }) as RendererResult;
-      }
-      setAutoClearFalse(renderer);
-      return renderer;
-    }) as CanvasGL;
-  }
-
-  if (isRendererLike(gl)) {
-    setAutoClearFalse(gl);
-    return gl;
-  }
-
-  return { ...gl, autoClear: false } as CanvasGL;
+  return gl;
 }
 
 export function getInLayerGLProps(gl: CanvasGL, context: WebGLRenderingContext | WebGL2RenderingContext): CanvasGL {

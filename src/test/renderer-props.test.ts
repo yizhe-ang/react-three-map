@@ -4,16 +4,16 @@ import { getInLayerGLProps, getOverlayGLProps } from "../core/renderer-props";
 describe("renderer props", () => {
   const context = {} as WebGLRenderingContext;
 
-  it("sets autoClear false on overlay gl config objects", () => {
+  it("does not override autoClear on overlay gl config objects", () => {
     const gl = getOverlayGLProps({ antialias: false, autoClear: true });
 
     expect(gl).toMatchObject({
       antialias: false,
-      autoClear: false,
+      autoClear: true,
     });
   });
 
-  it("sets autoClear false after async overlay gl factories resolve", async () => {
+  it("does not override autoClear after async overlay gl factories resolve", async () => {
     const renderer = { autoClear: true };
     const defaults = { canvas: document.createElement("canvas"), alpha: true };
     const gl = getOverlayGLProps(async (props) => {
@@ -25,7 +25,25 @@ describe("renderer props", () => {
     const resolved = await (gl as (props: typeof defaults) => Promise<typeof renderer>)(defaults);
 
     expect(resolved).toBe(renderer);
-    expect(renderer.autoClear).toBe(false);
+    expect(renderer.autoClear).toBe(true);
+  });
+
+  it("does not override overlay renderer instances", () => {
+    const renderer = { render: () => undefined, autoClear: true };
+    const gl = getOverlayGLProps(renderer as never);
+
+    expect(gl).toBe(renderer);
+    expect(renderer.autoClear).toBe(true);
+  });
+
+  it("sets autoClear false on in-layer gl config objects", () => {
+    const gl = getInLayerGLProps({ antialias: false, autoClear: true }, context);
+
+    expect(gl).toMatchObject({
+      context,
+      antialias: true,
+      autoClear: false,
+    });
   });
 
   it("rejects in-layer gl factories", () => {
